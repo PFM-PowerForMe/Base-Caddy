@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+set -e
+
+export CR_CADDY_WORK_DIR="${CR_CADDY_WORK_DIR:-/var/www}"
+# eg. EO-Connecting-IP CF-Connecting-IP
+export CR_CADDY_REAL_IP="${CR_CADDY_REAL_IP:-X-Forwarded-For}"
+
+envsubst < /etc/caddy/templates/php.tmpl > /tmp/caddy/Caddyfile
+
+HOME=/tmp/caddy XDG_CONFIG_HOME=/tmp/caddy/.config caddy fmt --overwrite /tmp/caddy/Caddyfile
+
+chown www-data:www-data /tmp/caddy/Caddyfile

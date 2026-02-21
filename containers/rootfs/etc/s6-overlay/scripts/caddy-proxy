@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+set -e
+
+export CR_CADDY_PASS_SERVER="${CR_CADDY_PASS_SERVER:-127.0.0.1}"
+export CR_CADDY_PASS_PORT="${CR_CADDY_PASS_PORT:-8000}"
+
+# eg. EO-Connecting-IP CF-Connecting-IP
+export CR_CADDY_REAL_IP="${CR_CADDY_REAL_IP:-X-Forwarded-For}"
+
+envsubst < /etc/caddy/templates/proxy.tmpl > /tmp/caddy/Caddyfile
+
+HOME=/tmp/caddy XDG_CONFIG_HOME=/tmp/caddy/.config caddy fmt --overwrite /tmp/caddy/Caddyfile
+
+chown www-data:www-data /tmp/caddy/Caddyfile

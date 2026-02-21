@@ -1,0 +1,7 @@
+#!/command/execlineb -P
+with-contenv
+s6-notifyoncheck
+s6-setuidgid www-data
+export HOME /tmp/caddy
+export XDG_CONFIG_HOME /tmp/caddy/.config
+/usr/sbin/caddy run --config /tmp/caddy/Caddyfile --adapter caddyfile --pidfile /run/caddy/caddy.pid

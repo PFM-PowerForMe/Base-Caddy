@@ -1,0 +1,25 @@
+{
+	admin off
+	auto_https off
+	ocsp_stapling off
+	storage file_system /tmp/caddy/data
+	storage_clean_interval 24h
+}
+
+:8080 {
+	log {
+		output stdout
+		format console
+	}
+
+	@blocked {
+	path /admin*
+	}
+	respond @blocked 404
+
+	reverse_proxy http://$CR_CADDY_PASS_SERVER:$CR_CADDY_PASS_PORT {
+		trusted_proxies private_ranges
+		header_up X-Real-IP {http.request.header.$CR_CADDY_REAL_IP}
+		header_up X-Forwarded-For {http.request.header.$CR_CADDY_REAL_IP}
+	}
+}
