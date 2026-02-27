@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
 set -e
 
+chown www-data:www-data -R /etc/caddy
 mkdir -pv /run/caddy
 chown www-data:www-data -R /run/caddy
 mkdir -pv /tmp/caddy/.config
