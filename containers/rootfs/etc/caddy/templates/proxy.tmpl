@@ -19,6 +19,7 @@
 	header {
 		-Server
 		-X-Powered-By
+		-Via
 	}
 
 	reverse_proxy http://$CR_CADDY_PASS_SERVER:$CR_CADDY_PASS_PORT {
