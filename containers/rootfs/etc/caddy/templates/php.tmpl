@@ -4,6 +4,9 @@
 	ocsp_stapling off
 	storage file_system /tmp/caddy/data
 	storage_clean_interval 24h
+	servers {
+		trusted_proxies static private_ranges
+	}
 }
 
 :8080 {
@@ -15,6 +18,11 @@
 	root * $CR_CADDY_WORK_DIR
 	file_server
 
+	map {http.request.header.X-Forwarded-Proto} {mapped_https} {
+		"https" "on"
+		default ""
+	}
+
 	header {
 		-Server
 		-X-Powered-By
@@ -22,29 +30,10 @@
 
 	php_fastcgi unix//run/php-fpm.sock {
 		dial_timeout 300s
-		trusted_proxies private_ranges
-		env HTTPS {http.request.header.X-Forwarded-Proto}
+		env HTTPS {mapped_https}
+		env HTTP_X_FORWARDED_PROTO {http.request.header.X-Forwarded-Proto}
 		env SERVER_PORT {http.request.header.X-Forwarded-Port}
 		header_up X-Real-IP {http.request.header.$CR_CADDY_REAL_IP}
 		header_up X-Forwarded-For {http.request.header.$CR_CADDY_REAL_IP}
 	}
 }
-
-# :8443 {
-# tls /etc/caddy/server.crt /etc/caddy/server.key
-
-# log {
-# output stdout
-# format console
-# }
-
-# root * $CR_CADDY_WORK_DIR
-# file_server
-
-# php_fastcgi unix//run/php-fpm.sock {
-# dial_timeout 300s
-# trusted_proxies private_ranges
-# header_up X-Real-IP {http.request.header.$CR_CADDY_REAL_IP}
-# header_up X-Forwarded-For {http.request.header.$CR_CADDY_REAL_IP}
-# }
-# }
