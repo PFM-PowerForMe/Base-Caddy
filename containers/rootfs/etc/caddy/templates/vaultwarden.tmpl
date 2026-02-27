@@ -12,8 +12,13 @@
 		format console
 	}
 
+	header {
+		-Server
+		-X-Powered-By
+	}
+
 	@blocked {
-	path /admin*
+		path /admin*
 	}
 	respond @blocked 404
 
