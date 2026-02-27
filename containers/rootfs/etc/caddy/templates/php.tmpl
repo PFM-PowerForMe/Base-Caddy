@@ -18,26 +18,28 @@
 	php_fastcgi unix//run/php-fpm.sock {
 		dial_timeout 300s
 		trusted_proxies private_ranges
+		env HTTPS {http.request.header.X-Forwarded-Proto}
+		env SERVER_PORT {http.request.header.X-Forwarded-Port}
 		header_up X-Real-IP {http.request.header.$CR_CADDY_REAL_IP}
 		header_up X-Forwarded-For {http.request.header.$CR_CADDY_REAL_IP}
 	}
 }
 
-:8443 {
-	tls /etc/caddy/server.crt /etc/caddy/server.key
+# :8443 {
+	# tls /etc/caddy/server.crt /etc/caddy/server.key
 
-	log {
-		output stdout
-		format console
-	}
+	# log {
+		# output stdout
+		# format console
+	# }
 
-	root * $CR_CADDY_WORK_DIR
-	file_server
+	# root * $CR_CADDY_WORK_DIR
+	# file_server
 
-	php_fastcgi unix//run/php-fpm.sock {
-		dial_timeout 300s
-		trusted_proxies private_ranges
-		header_up X-Real-IP {http.request.header.$CR_CADDY_REAL_IP}
-		header_up X-Forwarded-For {http.request.header.$CR_CADDY_REAL_IP}
-	}
-}
+	# php_fastcgi unix//run/php-fpm.sock {
+		# dial_timeout 300s
+		# trusted_proxies private_ranges
+		# header_up X-Real-IP {http.request.header.$CR_CADDY_REAL_IP}
+		# header_up X-Forwarded-For {http.request.header.$CR_CADDY_REAL_IP}
+	# }
+# }
