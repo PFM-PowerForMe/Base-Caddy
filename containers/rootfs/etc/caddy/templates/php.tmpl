@@ -41,6 +41,7 @@
 		env SERVER_PORT {mapped_port}
 		env HTTP_X_FORWARDED_PORT {mapped_port}
 		env HTTP_X_FORWARDED_PROTO {http.request.header.X-Forwarded-Proto}
+		env HTTP_FRONT_END_HTTPS {mapped_https}
 		header_up X-Real-IP {http.request.header.$CR_CADDY_REAL_IP}
 		header_up X-Forwarded-For {http.request.header.$CR_CADDY_REAL_IP}
 	}
